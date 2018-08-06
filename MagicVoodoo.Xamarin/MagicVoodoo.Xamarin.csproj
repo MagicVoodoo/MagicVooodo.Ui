@@ -1,25 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
+    
+
+    <PropertyGroup> <!-- Assembly Config -->
         <TargetFrameworks>netstandard2.0;netstandard1.0</TargetFrameworks>
         <LangVersion>latest</LangVersion>
         <ReleaseVersion>0.0.1-pre</ReleaseVersion>
         <Version>$(ReleaseVersion)</Version>
+        <Title>Magic Voodoo Xamarin.Forms Plugin</Title>
+        <Copyright>Copyright © 2018 Magic Voodoo, LLC</Copyright>
         <Description>A plugin for Xamarin.Forms that contains several useful controls:
 	- TabbedLayout
 	- CollapsingLayout</Description>
+        <Owners>Magic Voodoo, LLC</Owners>
+        <Authors>Todd Henderson</Authors>
+        <RepositoryUrl>https://github.com/MagicVoodoo/MagicVooodo.Xamarin</RepositoryUrl>
+    </PropertyGroup>
+    
+
+    <PropertyGroup><!-- Nuget Config -->
         <PackageId>$(PackageId)</PackageId>
         <PackageVersion>$(ReleaseVersion)</PackageVersion>
-        <Authors>Todd Henderson</Authors>
         <PackageIconUrl>https://github.com/MagicVoodoo/MagicVooodo.Xamarin/nuget/icon.jpeg</PackageIconUrl>
         <PackageLicenseUrl>https://github.com/MagicVoodoo/MagicVooodo.Xamarin/blob/master/LICENSE.md</PackageLicenseUrl>
-        <Owners>Magic Voodoo, LLC</Owners>
         <PackageProjectUrl>https://github.com/MagicVoodoo/MagicVooodo.Xamarin</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/MagicVoodoo/MagicVooodo.Xamarin</RepositoryUrl>
         <PackageTags>Xamarin.Forms;Adroid;iOS;Tab View;Dropdown View;</PackageTags>
         <PackOnBuild>true</PackOnBuild>
-        <Title>Magic Voodoo Xamarin.Forms Plugin</Title>
-        <Copyright>Copyright © 2018 Magic Voodoo, LLC</Copyright>
     </PropertyGroup>
     
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
