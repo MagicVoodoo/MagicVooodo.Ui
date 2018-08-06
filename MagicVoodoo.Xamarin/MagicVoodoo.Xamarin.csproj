@@ -1,11 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0;netstandard1.0</TargetFrameworks>
+        <LangVersion>latest</LangVersion>
+        <ReleaseVersion>0.0.1-pre</ReleaseVersion>
+        <Version>$(ReleaseVersion)</Version>
+        <Description>A plugin for Xamarin.Forms that contains several useful controls:
+	- TabbedLayout
+	- CollapsingLayout</Description>
+        <PackageId>$(PackageId)</PackageId>
+        <PackageVersion>$(ReleaseVersion)</PackageVersion>
+        <Authors>Todd Henderson</Authors>
+        <PackageIconUrl>https://github.com/MagicVoodoo/MagicVooodo.Xamarin/nuget/icon.jpeg</PackageIconUrl>
+        <PackageLicenseUrl>https://github.com/MagicVoodoo/MagicVooodo.Xamarin/blob/master/LICENSE.md</PackageLicenseUrl>
+        <Owners>Magic Voodoo, LLC</Owners>
+        <PackageProjectUrl>https://github.com/MagicVoodoo/MagicVooodo.Xamarin</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/MagicVoodoo/MagicVooodo.Xamarin</RepositoryUrl>
+        <PackageTags>Xamarin.Forms;Adroid;iOS;Tab View;Dropdown View;</PackageTags>
+        <PackOnBuild>true</PackOnBuild>
+        <Title>Magic Voodoo Xamarin.Forms Plugin</Title>
+        <Copyright>Copyright © 2018 Magic Voodoo, LLC</Copyright>
+    </PropertyGroup>
+    
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <DefineConstants>RELEASE;NETSTANDARD;NETSTANDARD2_0</DefineConstants>
+    </PropertyGroup>
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+      <DefineConstants>DEBUG;NETSTANDARD;</DefineConstants>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="3.1.0.697729" />
-  </ItemGroup>
+     <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.0'">
+        <PackageReference Include="Xamarin.Forms" Version="[2.4,3)">
+            <ExcludeAssets>build</ExcludeAssets>
+        </PackageReference>
+    </ItemGroup>
+    <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.0'">
+        <AssemblyTitle>$(AssemblyName) .NET Standard 1.0</AssemblyTitle>
+        <DefineConstants>NETSTANDARD1_6;$(AdditionalConstants)</DefineConstants>
+    </PropertyGroup>
+    
+    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+        <PackageReference Include="Xamarin.Forms" Version="3.1.0.697729" />
+    </ItemGroup>
+    <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+        <AssemblyTitle>$(AssemblyName) .NET Standard 2.0</AssemblyTitle>
+        <DefineConstants>NETSTANDARD2_0;$(AdditionalConstants)</DefineConstants>
+    </PropertyGroup>
+
 </Project>
