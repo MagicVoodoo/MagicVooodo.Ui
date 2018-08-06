@@ -104,4 +104,7 @@ Global
 		{6A0E1208-99B3-4E9F-9DD3-44F08C89DC78}.AppStore|iPhone.ActiveCfg = Debug|Any CPU
 		{6A0E1208-99B3-4E9F-9DD3-44F08C89DC78}.AppStore|iPhone.Build.0 = Debug|Any CPU
 	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		version = 0.0.1-pre
+	EndGlobalSection
 EndGlobal
