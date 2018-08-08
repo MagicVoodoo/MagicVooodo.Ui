@@ -14,7 +14,7 @@
     <AssemblyName>MagicVoodoo.iOS</AssemblyName>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <ReleaseVersion>0.0.1-pre</ReleaseVersion>
+    <ReleaseVersion>0.0.2-pre</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>

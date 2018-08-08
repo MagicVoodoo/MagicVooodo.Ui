@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <ReleaseVersion>0.0.1-pre</ReleaseVersion>
+    <ReleaseVersion>0.0.2-pre</ReleaseVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,9 +10,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Views\CollapViewPage.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\MagicVoodoo.Xamarin\MagicVoodoo.Xamarin.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="2.5.1.527436">

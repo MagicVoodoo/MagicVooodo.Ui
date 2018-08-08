@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-    
-
     <PropertyGroup> <!-- Assembly Config -->
         <TargetFrameworks>netstandard2.0;netstandard1.0</TargetFrameworks>
         <LangVersion>latest</LangVersion>
-        <ReleaseVersion>0.0.1-pre</ReleaseVersion>
+        <ReleaseVersion>0.0.2-pre</ReleaseVersion>
         <Version>$(ReleaseVersion)</Version>
         <Title>Magic Voodoo Xamarin.Forms Plugin</Title>
         <Copyright>Copyright © 2018 Magic Voodoo, LLC</Copyright>
@@ -21,11 +19,12 @@
     <PropertyGroup><!-- Nuget Config -->
         <PackageId>$(PackageId)</PackageId>
         <PackageVersion>$(ReleaseVersion)</PackageVersion>
-        <PackageIconUrl>https://github.com/MagicVoodoo/MagicVooodo.Xamarin/nuget/icon.jpeg</PackageIconUrl>
+        <PackageIconUrl>https://raw.github.com/MagicVoodoo/MagicVooodo.Xamarin/blob/master/icon.jpeg</PackageIconUrl>
         <PackageLicenseUrl>https://github.com/MagicVoodoo/MagicVooodo.Xamarin/blob/master/LICENSE.md</PackageLicenseUrl>
         <PackageProjectUrl>https://github.com/MagicVoodoo/MagicVooodo.Xamarin</PackageProjectUrl>
         <PackageTags>Xamarin.Forms;Adroid;iOS;Tab View;Dropdown View;</PackageTags>
         <PackOnBuild>true</PackOnBuild>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     </PropertyGroup>
     
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -54,4 +53,8 @@
         <DefineConstants>NETSTANDARD2_0;$(AdditionalConstants)</DefineConstants>
     </PropertyGroup>
 
+    <Target Name="PostPack" AfterTargets="Pack"> 
+        <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\$(Configuration)\$(PackageId).$(PackageVersion).nupkg" DestinationFolder="$(MSBuildProjectDirectory)/nuget/" />
+    </Target>
+    
 </Project>
