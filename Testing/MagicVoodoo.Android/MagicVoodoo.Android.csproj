@@ -19,7 +19,7 @@
     <TargetFrameworkVersion>v8.1</TargetFrameworkVersion>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <ReleaseVersion>0.0.1-pre</ReleaseVersion>
+    <ReleaseVersion>0.0.2</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -63,6 +63,9 @@
     </PackageReference>
     <PackageReference Include="Xamarin.Android.Support.v7.MediaRouter">
       <Version>27.0.2.1</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Forms">
+      <Version>*</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

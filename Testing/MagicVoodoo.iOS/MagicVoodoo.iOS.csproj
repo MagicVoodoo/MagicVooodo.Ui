@@ -14,7 +14,7 @@
     <AssemblyName>MagicVoodoo.iOS</AssemblyName>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <ReleaseVersion>0.0.1-pre</ReleaseVersion>
+    <ReleaseVersion>0.0.2</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>
@@ -149,10 +149,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.TestCloud.Agent">
-      <Version>0.21.5</Version>
+      <Version>*</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
-      <Version>2.5.1.527436</Version>
+      <Version>*</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
