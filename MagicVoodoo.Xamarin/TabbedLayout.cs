@@ -45,6 +45,13 @@ namespace MagicVoodoo.Xamarin
             BindableProperty.Create("Orientation", typeof(TabBarOrientations), typeof(TabbedLayout), TabBarOrientations.Top, propertyChanged: LayoutPropertyChanged);
 
 
+        static void HandleSlectedTabChanged(BindableObject sender, object oldValue, object newValue)
+        {
+            var self = sender as TabbedLayout;
+            foreach (var child in self?.Children)
+                child.IsVisible = self?.SelectedTab == child;
+        }
+
         new public TabBarOrientations Orientation
         {
             get => (TabBarOrientations)GetValue(OrientationProperty);
@@ -270,15 +277,9 @@ namespace MagicVoodoo.Xamarin
 
                 _TabBar.Children.Add(tabView);
 
-                if (SelectedTab == child)
-                {
-                    if (base.Children.Last() is TabView)
-                        base.Children.Remove(base.Children.Last());
+                child.IsVisible = SelectedTab == child;
 
-                    base.Children.Add(child);
-                }
-                      
-
+                base.Children.Add(child);
             }
             //SpacerView
             _TabBar.Children.Add( new ContentView { 
