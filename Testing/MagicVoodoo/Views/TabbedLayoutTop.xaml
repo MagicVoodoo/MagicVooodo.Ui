@@ -5,9 +5,9 @@
         <ToolbarItem Text="Left" Order="Primary" Priority="0" Clicked="Handle_Clicked" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <ui:TabbedLayout x:Name="mainLayout" BarBackgroundColor="Silver">
+        <ui:TabbedLayout x:Name="mainLayout">
             <ui:TabbedLayout.TabBarItems>
-                <ui:TabBarItem Text="Default" Clicked="Handle_Clicked" />
+                <ui:TabBarItem Text="Silver" Clicked="Handle_Clicked" />
             </ui:TabbedLayout.TabBarItems>
             <ui:TabView Title="Tab 1" Icon="Icon.png">
                 <StackLayout>
@@ -19,7 +19,7 @@
                     <Label Text="This is tab 2" />
                 </StackLayout>
             </ui:TabView>
-            <ui:TabView Title="Tab 2" Icon="Icon.png">
+            <ui:TabView Title="Tab 3" Icon="Icon.png">
                 <StackLayout>
                     <Label Text="This is tab 3" />
                 </StackLayout>
