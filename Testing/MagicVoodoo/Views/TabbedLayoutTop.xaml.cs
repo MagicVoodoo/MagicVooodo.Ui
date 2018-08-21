@@ -18,14 +18,14 @@ namespace MagicVoodoo.Views
             {
                 switch (sender)
                 {
-                    case ToolbarItem self when self.Text == "Top":
-                        mainLayout.Orientation = TabBarOrientations.Top;
+                    case ToolbarItem self when self.Text == "Default":
+                        mainLayout.Orientation = TabBarOrientations.Default;
                         self.Text = "Left";
                         break;
 
                     case ToolbarItem self when self.Text == "Left":
                         mainLayout.Orientation = TabBarOrientations.Left;
-                        self.Text = "Top";
+                        self.Text = "Default";
                         break;
 
                     case TabBarItem self when self.Text == "Default":

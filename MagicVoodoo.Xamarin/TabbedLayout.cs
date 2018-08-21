@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using Xamarin.Forms;
 using static Xamarin.Forms.Button;
@@ -11,10 +12,15 @@ namespace MagicVoodoo.Xamarin
     [ContentProperty("Children")]
     public class TabbedLayout : StackLayout
     {
+        ContentView _Content = new ContentView
+        {
+            HorizontalOptions = LayoutOptions.FillAndExpand,
+            VerticalOptions = LayoutOptions.FillAndExpand,
+        };
         public TabView Content
         {
-            get => _Content;
-            protected set => _Content = value;
+            get => _Content.Content as TabView;
+            protected set => _Content.Content = value;
         }
 
         ObservableCollection<TabView> _children = new ObservableCollection<TabView>();
@@ -22,7 +28,6 @@ namespace MagicVoodoo.Xamarin
 
         ObservableCollection<TabBarItem> _tabBarItem = new ObservableCollection<TabBarItem>();
         public IList<TabBarItem> TabBarItems => _tabBarItem;
-
 
         public static readonly BindableProperty SelectedTabProperty =
             BindableProperty.Create("SelectedTab", typeof(TabView), typeof(TabbedLayout), null, propertyChanged: SelectedTabPropertyChanged);
@@ -36,21 +41,13 @@ namespace MagicVoodoo.Xamarin
         static void SelectedTabPropertyChanged(BindableObject sender, object oldValue, object newValue)
         {
             var self = sender as TabbedLayout;
-            self?.SlectedTabChanged?.Invoke(self, newValue as TabView);
+            self.SelectTab(newValue as TabView);
         }
 
         public event EventHandler<TabView> SlectedTabChanged;
 
         new public static readonly BindableProperty OrientationProperty =
-            BindableProperty.Create("Orientation", typeof(TabBarOrientations), typeof(TabbedLayout), TabBarOrientations.Top, propertyChanged: LayoutPropertyChanged);
-
-
-        static void HandleSlectedTabChanged(BindableObject sender, object oldValue, object newValue)
-        {
-            var self = sender as TabbedLayout;
-            foreach (var child in self?.Children)
-                child.IsVisible = self?.SelectedTab == child;
-        }
+            BindableProperty.Create("Orientation", typeof(TabBarOrientations), typeof(TabbedLayout), TabBarOrientations.Default);
 
         new public TabBarOrientations Orientation
         {
@@ -64,7 +61,7 @@ namespace MagicVoodoo.Xamarin
         public Color SelectedColor
         {
             get => (Color)GetValue(SelectedColorProperty);
-            set => SetValue(SelectedTabProperty, value);
+            set => SetValue(SelectedColorProperty, value);
         }
 
         public static readonly BindableProperty BarBackgroundColorProperty =
@@ -84,7 +81,7 @@ namespace MagicVoodoo.Xamarin
 
         public static readonly BindableProperty SeperatorColorProperty =
             BindableProperty.Create("SeperatorColor", typeof(Color), typeof(TabbedLayout), Color.Silver, propertyChanged: SeperatorColorPropertyChanged);
-        
+
         public Color SeperatorColor
         {
             get => (Color)GetValue(SeperatorColorProperty);
@@ -124,19 +121,25 @@ namespace MagicVoodoo.Xamarin
         static void SeparatorThicknessPropertyChanged(BindableObject sender, object oldValue, object newValue)
         {
             var self = sender as TabbedLayout;
-            if (self?.Orientation == TabBarOrientations.Top)
+
+            switch (self?.Orientation)
             {
-                self._Seperator.WidthRequest = (double)BoxView.WidthRequestProperty.DefaultValue;
-                self._Seperator.HeightRequest = (double)newValue;
-                self._Seperator.VerticalOptions = (LayoutOptions)BoxView.VerticalOptionsProperty.DefaultValue;
-                self._Seperator.HorizontalOptions = LayoutOptions.FillAndExpand;
-            } 
-            else
-            {
-                self._Seperator.HeightRequest = (double)BoxView.HeightRequestProperty.DefaultValue;
-                self._Seperator.WidthRequest = (double)newValue;
-                self._Seperator.VerticalOptions = LayoutOptions.FillAndExpand;
-                self._Seperator.HorizontalOptions = (LayoutOptions)BoxView.HorizontalOptionsProperty.DefaultValue;
+                case TabBarOrientations.Top:
+                    self._Seperator.WidthRequest = (double)BoxView.WidthRequestProperty.DefaultValue;
+                    self._Seperator.HeightRequest = (double)newValue;
+                    self._Seperator.VerticalOptions = (LayoutOptions)BoxView.VerticalOptionsProperty.DefaultValue;
+                    self._Seperator.HorizontalOptions = LayoutOptions.FillAndExpand;
+                    break;
+
+                case TabBarOrientations.Left:
+                    self._Seperator.HeightRequest = (double)BoxView.HeightRequestProperty.DefaultValue;
+                    self._Seperator.WidthRequest = (double)newValue;
+                    self._Seperator.VerticalOptions = LayoutOptions.FillAndExpand;
+                    self._Seperator.HorizontalOptions = (LayoutOptions)BoxView.HorizontalOptionsProperty.DefaultValue;
+                    break;
+
+                default:
+                    goto case TabBarOrientations.Top;
             }
         }
 
@@ -160,40 +163,64 @@ namespace MagicVoodoo.Xamarin
             IsVisible = (bool)SeparatorIsVisibleProperty.DefaultValue,
         };
 
-        protected TabView _Content = new TabView();
-
 
         public TabbedLayout()
         {
+            //CompressedLayout.SetIsHeadless(_Content, true);
+
             _children.CollectionChanged += _children_CollectionChanged;
-            _tabBarItem.CollectionChanged += _children_CollectionChanged;
+            _tabBarItem.CollectionChanged += _tabBarItems_CollectionChanged;
 
             base.Spacing = 0;
 
-            base.Children.Add(_TabBar);
-            base.Children.Add(_Seperator);
+            LayoutChildren();
+
         }
 
         public virtual void SelectTab(TabView tabView)
         {
-            if (tabView != null || tabView != SelectedTab)
-            {
-                SelectedTab = tabView;
-                LayoutChildren();
-            }
+            if (tabView == SelectedTab)
+                return;
+
+
+            SelectedTab = tabView;
+            foreach (var child in Children)
+                child.IsSelected = child == SelectedTab;
+            
+            Content = SelectedTab;
+            SlectedTabChanged?.Invoke(this, SelectedTab);
+
+            //_Content.ForceLayout();
         }
 
-        void HandleTabClicked(object sender)
-        {
-            SelectTab(sender as TabView);
-        }
+        void Tab_Clicked(object sender, EventArgs e) => SelectTab(sender as TabView);
+
 
         void LayoutChildren()
         {
-            if (Children?.Count < 1)
+            if (Children?.Count < 1 && TabBarItems?.Count < 1)
                 return;
 
-            _TabBar.Children.Clear();
+            base.Children.Clear();
+            switch (Orientation)
+            {
+                case TabBarOrientations.Top:
+                    base.Children.Add(_TabBar);
+                    base.Children.Add(_Seperator);
+                    base.Children.Add(_Content);
+                    break;
+
+                case TabBarOrientations.Left:
+                    base.Children.Add(_TabBar);
+                    base.Children.Add(_Seperator);
+                    base.Children.Add(_Content);
+                    break;
+
+                default:
+                    goto case TabBarOrientations.Top;
+            }
+
+
 
             switch (Orientation)
             {
@@ -204,7 +231,6 @@ namespace MagicVoodoo.Xamarin
                     _Seperator.HeightRequest = SeparatorThickness;
                     _Seperator.VerticalOptions = (LayoutOptions)BoxView.VerticalOptionsProperty.DefaultValue;
                     _Seperator.HorizontalOptions = LayoutOptions.FillAndExpand;
-
                     break;
 
                 case TabBarOrientations.Left:
@@ -215,84 +241,84 @@ namespace MagicVoodoo.Xamarin
                     _Seperator.VerticalOptions = LayoutOptions.FillAndExpand;
                     _Seperator.HorizontalOptions = (LayoutOptions)BoxView.HorizontalOptionsProperty.DefaultValue;
                     break;
+
+                default:
+                    goto case TabBarOrientations.Top;
             }
 
+            _TabBar.Children.Clear();
             foreach (var child in Children)
             {
                 if (SelectedTab == default(TabView))
                     SelectedTab = child;
 
-                var tabView = new StackLayout
-                {
-                    VerticalOptions = LayoutOptions.Start,
-                    HorizontalOptions = LayoutOptions.Start
-                };
-
-                var tabbutton = new Button
-                {
-                    Image = child.Icon,
-                    Text = child.Title,
-                    BackgroundColor = Color.Transparent,
-                    CommandParameter = child,
-                    Command = new Command(HandleTabClicked, (sender) => SelectedTab != child),
-                    ContentLayout = new ButtonContentLayout(ImagePosition.Top, 5)
-                };
-
-                switch (Orientation)
-                {
-                    case TabBarOrientations.Top:
-                        base.Orientation = StackOrientation.Vertical;
-                        break;
-
-                    case TabBarOrientations.Left:
-                        base.Orientation = StackOrientation.Horizontal;
-                        break;
-                }
-
-                switch (Orientation)
-                {
-                    case TabBarOrientations.Top:
-                        tabView.Children.Add(tabbutton);
-                        tabView.Children.Add(new BoxView
-                        {
-                            Color = (SelectedTab == child) ? SelectedColor : Color.Transparent,
-                            HorizontalOptions = LayoutOptions.FillAndExpand,
-                            VerticalOptions = LayoutOptions.End,
-                            HeightRequest = 5
-                        });
-                        break;
-
-                    case TabBarOrientations.Left:
-                        tabView.Orientation = StackOrientation.Horizontal;
-                        tabView.Children.Add(new BoxView
-                        {
-                            Color = (SelectedTab == child) ? SelectedColor : Color.Transparent,
-                            HorizontalOptions = LayoutOptions.Start,
-                            VerticalOptions = LayoutOptions.FillAndExpand,
-                            WidthRequest = 5
-                        });
-                        tabView.Children.Add(tabbutton);
-                        break;
-                }
-
-                _TabBar.Children.Add(tabView);
-
-                child.IsVisible = SelectedTab == child;
-
-                base.Children.Add(child);
+                _TabBar.Children.Add(child.Tab);
             }
+
             //SpacerView
-            _TabBar.Children.Add( new ContentView { 
-                HorizontalOptions = LayoutOptions.FillAndExpand, 
+            _TabBar.Children.Add(new ContentView
+            {
+                HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.FillAndExpand
             });
-            foreach(var item in TabBarItems)
+
+            foreach (var item in TabBarItems)
                 _TabBar.Children.Add(item);
-            
+
+            Content = SelectedTab;
         }
 
-        void _children_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) =>
+        void _children_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    foreach (var item in e.NewItems)
+                    {
+                        var tab = item as TabView;
+                        if (tab == null)
+                            break;
+                        tab.Clicked += Tab_Clicked;
+                    }
+                    break;
+
+                case NotifyCollectionChangedAction.Remove:
+                    foreach (var item in e.OldItems)
+                    {
+                        var tab = item as TabView;
+                        if (tab == null)
+                            break;
+                        tab.Clicked -= Tab_Clicked;
+                    }
+                    break;
+
+                case NotifyCollectionChangedAction.Replace:
+                    //New tabs
+                    foreach (var item in e.NewItems)
+                    {
+                        var tab = item as TabView;
+                        if (tab == null)
+                            break;
+                        tab.Clicked += Tab_Clicked;
+                    }
+
+                    //OldTabs
+                    foreach (var item in e.OldItems)
+                    {
+                        var tab = item as TabView;
+                        if (tab == null)
+                            break;
+                        tab.Clicked -= Tab_Clicked;
+                    }
+                    break;
+            }
+
             LayoutChildren();
+        }
+
+        void _tabBarItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) =>
+            LayoutChildren();
+
 
     }
 

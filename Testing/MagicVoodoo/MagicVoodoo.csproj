@@ -13,6 +13,8 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="*" />
-    <PackageReference Include="MagicVoodoo.Xamarin" Version="0.0.2.1808131811-pre" />
     </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MagicVoodoo.Xamarin\MagicVoodoo.Xamarin.csproj" />
+  </ItemGroup>
 </Project>
