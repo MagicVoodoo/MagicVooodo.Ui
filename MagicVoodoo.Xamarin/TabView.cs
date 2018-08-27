@@ -136,7 +136,7 @@ namespace MagicVoodoo.Xamarin
             {
                 VerticalOptions = LayoutOptions.StartAndExpand,
                 HorizontalOptions = LayoutOptions.Start,
-                BackgroundColor = Color.Red
+                BackgroundColor = Color.Transparent
             };
 
             _tabButton.Command = new Command(HandleClickAction, (sender) => !IsSelected);
