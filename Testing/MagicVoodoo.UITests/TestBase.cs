@@ -9,12 +9,12 @@ namespace MagicVoodoo.XamarinTests
 {
     [TestFixture(Platform.Android)]
     [TestFixture(Platform.iOS)]
-    public class Tests
+    public class TestBase
     {
-        IApp app;
-        Platform platform;
+        protected IApp app;
+        protected Platform platform;
 
-        public Tests(Platform platform)
+        public TestBase(Platform platform)
         {
             this.platform = platform;
         }
@@ -25,13 +25,5 @@ namespace MagicVoodoo.XamarinTests
             app = AppInitializer.StartApp(platform);
         }
 
-        [Test]
-        public void WelcomeTextIsDisplayed()
-        {
-            AppResult[] results = app.WaitForElement(c => c.Marked("Welcome to Xamarin.Forms!"));
-            app.Screenshot("Welcome screen.");
-
-            Assert.IsTrue(results.Any());
-        }
     }
 }

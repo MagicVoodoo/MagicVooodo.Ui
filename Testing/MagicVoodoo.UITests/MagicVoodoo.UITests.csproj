@@ -27,14 +27,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="nunit.framework" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NUnit" Version="2.6.4" />
-    <PackageReference Include="Xamarin.UITest" Version="2.2.2" />
+    <PackageReference Include="Xamarin.UITest" Version="2.2.5" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Tests.cs" />
+    <Compile Include="TestBase.cs" />
     <Compile Include="AppInitializer.cs" />
+    <Compile Include="TabLayoutTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MagicVoodoo.iOS\MagicVoodoo.iOS.csproj">

@@ -11,7 +11,7 @@ namespace MagicVoodoo.Xamarin
     {
         public static readonly BindableProperty TitleProperty =
             BindableProperty.Create("Title", typeof(string), typeof(TabbedLayout), null, propertyChanged: TitlePropertyChanged);
-        
+
         public String Title
         {
             get => (String)GetValue(TitleProperty);
@@ -73,7 +73,7 @@ namespace MagicVoodoo.Xamarin
         }
 
         public static readonly BindableProperty IsSelectedProperty =
-            BindableProperty.Create("IsSelected", typeof(bool), typeof(TabbedLayout), false, propertyChanged: IsSelectedPropertyChanged );
+            BindableProperty.Create("IsSelected", typeof(bool), typeof(TabbedLayout), false, propertyChanged: IsSelectedPropertyChanged);
 
         public bool IsSelected
         {
@@ -109,18 +109,22 @@ namespace MagicVoodoo.Xamarin
         }
 
         Button _tabButton = new Button
-            {
-                BackgroundColor = Color.Transparent,
-                ContentLayout = new ButtonContentLayout(ImagePosition.Top, 5)
-            };
+        {
+            BackgroundColor = Color.Transparent,
+            BorderColor = Color.Transparent,
+           
+            ContentLayout = new ButtonContentLayout(ImagePosition.Top, 5),
+            HorizontalOptions = LayoutOptions.FillAndExpand,
+            VerticalOptions = LayoutOptions.FillAndExpand
+        };
 
 
         BoxView _highliter = new BoxView
-            {
-                HorizontalOptions = LayoutOptions.FillAndExpand,
-                VerticalOptions = LayoutOptions.End,
-                HeightRequest = 5
-            };
+        {
+            HorizontalOptions = LayoutOptions.FillAndExpand,
+            VerticalOptions = LayoutOptions.End,
+            HeightRequest = 5
+        };
 
 
         public event EventHandler Clicked;
@@ -130,9 +134,9 @@ namespace MagicVoodoo.Xamarin
         {
             Tab = new StackLayout
             {
-                VerticalOptions = LayoutOptions.Start,
+                VerticalOptions = LayoutOptions.StartAndExpand,
                 HorizontalOptions = LayoutOptions.Start,
-                BackgroundColor = Color.Transparent
+                BackgroundColor = Color.Red
             };
 
             _tabButton.Command = new Command(HandleClickAction, (sender) => !IsSelected);
