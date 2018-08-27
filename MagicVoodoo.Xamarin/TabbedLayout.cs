@@ -182,7 +182,6 @@ namespace MagicVoodoo.Xamarin
             if (tabView == SelectedTab)
                 return;
 
-
             SelectedTab = tabView;
             foreach (var child in Children)
                 child.IsSelected = child == SelectedTab;
@@ -250,7 +249,7 @@ namespace MagicVoodoo.Xamarin
             foreach (var child in Children)
             {
                 if (SelectedTab == default(TabView))
-                    SelectedTab = child;
+                    SelectTab(child);
 
                 _TabBar.Children.Add(child.Tab);
             }
@@ -264,8 +263,7 @@ namespace MagicVoodoo.Xamarin
 
             foreach (var item in TabBarItems)
                 _TabBar.Children.Add(item);
-
-            Content = SelectedTab;
+                
         }
 
         void _children_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
