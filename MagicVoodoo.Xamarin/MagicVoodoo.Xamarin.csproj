@@ -104,8 +104,15 @@
     
     <ItemGroup>
       <Folder Include="nuget\" />
+      <Folder Include="Services\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Effects\HybridWebViewMessagingEffect.config" />
+    </ItemGroup>
+    <ItemGroup>
+      <Compile Remove="Effects\HybridWebMessaging.cs" />
+    </ItemGroup>
     <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
         <AssemblyTitle>$(AssemblyName) .NET Standard 2.0</AssemblyTitle>
         <DefineConstants>NETSTANDARD2_0;$(AdditionalConstants)</DefineConstants>
