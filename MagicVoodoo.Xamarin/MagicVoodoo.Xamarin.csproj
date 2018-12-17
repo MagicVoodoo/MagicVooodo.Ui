@@ -56,7 +56,7 @@
           <CustomCommands>
             <Command>
               <type>AfterBuild</type>
-              <command>dotnet pack --configuration=Release</command>
+              <command>dotnet pack --configuration=Release --include-symbols </command>
             </Command>
           </CustomCommands>
         </CustomCommands>
@@ -74,7 +74,7 @@
           <CustomCommands>
             <Command>
               <type>AfterBuild</type>
-              <command>dotnet pack --configuration=Debug</command>
+              <command>dotnet pack --configuration=Debug  --include-symbols </command>
             </Command>
           </CustomCommands>
         </CustomCommands>
@@ -97,7 +97,7 @@
         <DefineConstants>NETSTANDARD1_6;$(AdditionalConstants)</DefineConstants>
     </PropertyGroup>
     <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-        <PackageReference Include="Xamarin.Forms" Version="3.0">
+        <PackageReference Include="Xamarin.Forms" Version="3.*">
             <ExcludeAssets>build</ExcludeAssets>
         </PackageReference>
     </ItemGroup>

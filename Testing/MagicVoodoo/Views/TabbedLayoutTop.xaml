@@ -14,7 +14,7 @@
                     <Label Text="This is tab 1" />
                 </StackLayout>
             </ui:TabView>
-            <ui:TabView Title="Tab 2">
+            <ui:TabView Title="Tab 2" TabPadding="20, 0">
                 <StackLayout>
                     <Label Text="This is tab 2" />
                 </StackLayout>

@@ -40,8 +40,8 @@ namespace MagicVoodoo.Xamarin
 
         static void SelectedTabPropertyChanged(BindableObject sender, object oldValue, object newValue)
         {
-            var self = sender as TabbedLayout;
-            self.SelectTab(newValue as TabView);
+            if (sender is TabbedLayout self)
+                self.SelectTab(newValue as TabView);
         }
 
         public event EventHandler<TabView> SlectedTabChanged;
@@ -75,8 +75,8 @@ namespace MagicVoodoo.Xamarin
 
         static void BarBackgroundColorPropertyChanged(BindableObject sender, object oldValue, object newValue)
         {
-            var self = sender as TabbedLayout;
-            self._TabBar.BackgroundColor = (Color)newValue;
+            if (sender is TabbedLayout self)
+                self._TabBar.BackgroundColor = (Color)newValue;
         }
 
         public static readonly BindableProperty SeperatorColorProperty =
@@ -90,8 +90,8 @@ namespace MagicVoodoo.Xamarin
 
         static void SeperatorColorPropertyChanged(BindableObject sender, object oldValue, object newValue)
         {
-            var self = sender as TabbedLayout;
-            self._Seperator.Color = (Color)newValue;
+            if (sender is TabbedLayout self)
+                self._Seperator.Color = (Color)newValue;
         }
 
         public static readonly BindableProperty SeparatorIsVisibleProperty =
@@ -105,8 +105,8 @@ namespace MagicVoodoo.Xamarin
 
         static void SeparatorIsVisiblePropertyChanged(BindableObject sender, object oldValue, object newValue)
         {
-            var self = sender as TabbedLayout;
-            self._Seperator.IsVisible = (bool)newValue;
+            if (sender is TabbedLayout self)
+                self._Seperator.IsVisible = (bool)newValue;
         }
 
         public static readonly BindableProperty SeparatorThicknessProperty =
@@ -120,34 +120,48 @@ namespace MagicVoodoo.Xamarin
 
         static void SeparatorThicknessPropertyChanged(BindableObject sender, object oldValue, object newValue)
         {
-            var self = sender as TabbedLayout;
+            if (sender is TabbedLayout self)
+                switch (self?.Orientation)
+                {
+                    case TabBarOrientations.Top:
+                        self._Seperator.WidthRequest = (double)BoxView.WidthRequestProperty.DefaultValue;
+                        self._Seperator.HeightRequest = (double)newValue;
+                        self._Seperator.VerticalOptions = (LayoutOptions)BoxView.VerticalOptionsProperty.DefaultValue;
+                        self._Seperator.HorizontalOptions = LayoutOptions.FillAndExpand;
+                        break;
 
-            switch (self?.Orientation)
-            {
-                case TabBarOrientations.Top:
-                    self._Seperator.WidthRequest = (double)BoxView.WidthRequestProperty.DefaultValue;
-                    self._Seperator.HeightRequest = (double)newValue;
-                    self._Seperator.VerticalOptions = (LayoutOptions)BoxView.VerticalOptionsProperty.DefaultValue;
-                    self._Seperator.HorizontalOptions = LayoutOptions.FillAndExpand;
-                    break;
+                    case TabBarOrientations.Left:
+                        self._Seperator.HeightRequest = (double)BoxView.HeightRequestProperty.DefaultValue;
+                        self._Seperator.WidthRequest = (double)newValue;
+                        self._Seperator.VerticalOptions = LayoutOptions.FillAndExpand;
+                        self._Seperator.HorizontalOptions = (LayoutOptions)BoxView.HorizontalOptionsProperty.DefaultValue;
+                        break;
 
-                case TabBarOrientations.Left:
-                    self._Seperator.HeightRequest = (double)BoxView.HeightRequestProperty.DefaultValue;
-                    self._Seperator.WidthRequest = (double)newValue;
-                    self._Seperator.VerticalOptions = LayoutOptions.FillAndExpand;
-                    self._Seperator.HorizontalOptions = (LayoutOptions)BoxView.HorizontalOptionsProperty.DefaultValue;
-                    break;
+                    default:
+                        goto case TabBarOrientations.Top;
+                }
+        }
 
-                default:
-                    goto case TabBarOrientations.Top;
-            }
+        public static readonly BindableProperty TabBarPaddingProperty =
+            BindableProperty.Create("TabBarPadding", typeof(Thickness), typeof(TabbedLayout), new Thickness(0, 0, 5, 0), propertyChanged: TabBarPaddingPropertyChanged);
+
+        public Thickness TabBarPadding
+        {
+            get => (Thickness)GetValue(TabBarPaddingProperty);
+            set => SetValue(TabBarPaddingProperty, value);
+        }
+
+        static void TabBarPaddingPropertyChanged(BindableObject sender, object oldValue, object newValue)
+        {
+            if (sender is TabbedLayout self)
+                self._TabBar.Padding = (Thickness)newValue;
         }
 
 
         static void LayoutPropertyChanged(BindableObject sender, object oldValue, object newValue)
         {
-            var self = sender as TabbedLayout;
-            self?.LayoutChildren();
+            if (sender is TabbedLayout self)
+                self.LayoutChildren();
         }
 
 
@@ -185,7 +199,7 @@ namespace MagicVoodoo.Xamarin
             SelectedTab = tabView;
             foreach (var child in Children)
                 child.IsSelected = child == SelectedTab;
-            
+
             Content = SelectedTab;
             SlectedTabChanged?.Invoke(this, SelectedTab);
 
@@ -263,7 +277,7 @@ namespace MagicVoodoo.Xamarin
 
             foreach (var item in TabBarItems)
                 _TabBar.Children.Add(item);
-                
+
         }
 
         void _children_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

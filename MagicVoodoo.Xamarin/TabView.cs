@@ -10,25 +10,62 @@ namespace MagicVoodoo.Xamarin
     public class TabView : ContentView
     {
         public static readonly BindableProperty TitleProperty =
-            BindableProperty.Create("Title", typeof(string), typeof(TabbedLayout), null, propertyChanged: TitlePropertyChanged);
+            BindableProperty.Create("Title", typeof(string), typeof(TabView), null, propertyChanged: TitlePropertyChanged);
 
-        public String Title
+        public string Title
         {
-            get => (String)GetValue(TitleProperty);
+            get => (string)GetValue(TitleProperty);
             set => SetValue(TitleProperty, value);
         }
 
         static void TitlePropertyChanged(BindableObject sender, object oldValue, object newValue)
         {
-            var self = sender as TabView;
-            if (self == null)
+            if (!(sender is TabView self))
                 return;
 
             self._tabButton.Text = (string)newValue;
         }
 
+
+        public static readonly BindableProperty TitleColorProperty =
+            BindableProperty.Create("TitleColor", typeof(Color), typeof(TabView), null, propertyChanged: TitleColorPropertyChanged);
+
+
+        public Color TitleColor
+        {
+            get => (Color)GetValue(TitleColorProperty);
+            set => SetValue(TitleColorProperty, value);
+        }
+
+        static void TitleColorPropertyChanged(BindableObject sender, object oldValue, object newValue)
+        {
+            if (!(sender is TabView self))
+                return;
+
+            self._tabButton.TextColor = (Color)newValue;
+        }
+
+        public static readonly BindableProperty TitleSizeProperty =
+            BindableProperty.Create("TitleSize", typeof(double), typeof(TabView), null, propertyChanged: TitleSizePropertyChanged);
+
+
+        public double TitleSize
+        {
+            get => (double)GetValue(TitleSizeProperty);
+            set => SetValue(TitleSizeProperty, value);
+        }
+
+        static void TitleSizePropertyChanged(BindableObject sender, object oldValue, object newValue)
+        {
+            if (!(sender is TabView self))
+                return;
+
+            self._tabButton.FontSize = (double)newValue;
+        }
+
+
         public static readonly BindableProperty IconProperty =
-            BindableProperty.Create("Icon", typeof(FileImageSource), typeof(TabbedLayout), null, propertyChanged: IconPropertyChanged);
+            BindableProperty.Create("Icon", typeof(FileImageSource), typeof(TabView), null, propertyChanged: IconPropertyChanged);
 
         public FileImageSource Icon
         {
@@ -38,26 +75,42 @@ namespace MagicVoodoo.Xamarin
 
         static void IconPropertyChanged(BindableObject sender, object oldValue, object newValue)
         {
-            var self = sender as TabView;
-            if (self == null)
+            if (!(sender is TabView self))
                 return;
 
             self._tabButton.Image = (FileImageSource)newValue;
         }
 
 
-
         public static readonly BindableProperty TabProperty =
-            BindableProperty.Create("Tab", typeof(StackLayout), typeof(TabbedLayout), null);
+            BindableProperty.Create("Tab", typeof(StackLayout), typeof(TabView), null);
 
         public StackLayout Tab
         {
             get => (StackLayout)GetValue(TabProperty);
-            set => SetValue(TabProperty, value);
+            private set => SetValue(TabProperty, value);
         }
 
+        public static readonly BindableProperty TabPaddingProperty =
+           BindableProperty.Create("TabPadding", typeof(Thickness), typeof(TabView), propertyChanged: TabPaddingPropertyChanged);
+
+        public Thickness TabPadding
+        {
+            get => (Thickness)GetValue(TabPaddingProperty);
+            set => SetValue(TitleProperty, value);
+        }
+
+        static void TabPaddingPropertyChanged(BindableObject sender, object oldValue, object newValue)
+        {
+            if (!(sender is TabView self))
+                return;
+
+            self.Tab.Padding = (Thickness)newValue;
+        }
+
+
         public static readonly BindableProperty OrientationProperty =
-            BindableProperty.Create("Orientation", typeof(TabBarOrientations), typeof(TabbedLayout), TabBarOrientations.Default, propertyChanged: LayoutPropertyChanged);
+            BindableProperty.Create("Orientation", typeof(TabBarOrientations), typeof(TabView), TabBarOrientations.Default, propertyChanged: LayoutPropertyChanged);
 
 
         public TabBarOrientations Orientation
@@ -68,12 +121,14 @@ namespace MagicVoodoo.Xamarin
 
         static void LayoutPropertyChanged(BindableObject sender, object oldValue, object newValue)
         {
-            var self = sender as TabView;
-            self?.Layout();
+            if (!(sender is TabView self))
+                return;
+
+            self.Layout();
         }
 
         public static readonly BindableProperty IsSelectedProperty =
-            BindableProperty.Create("IsSelected", typeof(bool), typeof(TabbedLayout), false, propertyChanged: IsSelectedPropertyChanged);
+            BindableProperty.Create("IsSelected", typeof(bool), typeof(TabView), false, propertyChanged: IsSelectedPropertyChanged);
 
         public bool IsSelected
         {
@@ -83,15 +138,14 @@ namespace MagicVoodoo.Xamarin
 
         static void IsSelectedPropertyChanged(BindableObject sender, object oldValue, object newValue)
         {
-            var self = sender as TabView;
-            if (self == null)
+            if (!(sender is TabView self))
                 return;
 
             self._highliter.Color = self.IsSelected ? self.SelectedColor : Color.Transparent;
         }
 
         public static readonly BindableProperty SelectedColorProperty =
-            BindableProperty.Create("SelectedColor", typeof(Color), typeof(TabbedLayout), Color.Accent, propertyChanged: SelectedColorPropertyChanged);
+            BindableProperty.Create("SelectedColor", typeof(Color), typeof(TabView), Color.Accent, propertyChanged: SelectedColorPropertyChanged);
 
         public Color SelectedColor
         {
@@ -101,8 +155,7 @@ namespace MagicVoodoo.Xamarin
 
         static void SelectedColorPropertyChanged(BindableObject sender, object oldValue, object newValue)
         {
-            var self = sender as TabView;
-            if (self == null)
+            if (!(sender is TabView self))
                 return;
 
             self._highliter.Color = (Color)newValue;
