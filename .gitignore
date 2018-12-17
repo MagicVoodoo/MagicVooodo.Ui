@@ -7,6 +7,8 @@
 packages/
 TestResults/
 
+.mfractor/
+
 *.nupkg
 
 # globs
